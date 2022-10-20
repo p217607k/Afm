@@ -42,14 +42,14 @@ smart_device = (
 
 class place(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    p_id = models.CharField(max_length = 10,blank=False,unique=True,primary_key=True,default=create_new_ref_number)
-    p_type = models.CharField(max_length=15,unique=True,)
+    p_id = models.CharField(max_length = 10,blank=False,unique=True,default=create_new_ref_number)
+    p_type = models.CharField(max_length=15,)
 
 class field(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     p_id = models.ForeignKey(place, max_length=10, null=False, default=1,on_delete=models.CASCADE)
-    f_id = models.CharField(max_length = 10, blank=False,unique=True,primary_key=True,default=create_new_ref_number)
-    f_name = models.CharField(max_length=15,unique=True,blank=False)
+    f_id = models.CharField(max_length = 10, blank=False,unique=True,default=create_new_ref_number)
+    f_name = models.CharField(max_length=15,blank=False)
 
 class allDevices(models.Model):
     d_id= models.CharField(max_length=40, default=0,primary_key=True)

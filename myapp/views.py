@@ -419,6 +419,37 @@ def getUsernFirebasetable(userData):
     print(getUser.fcm)
 
     send_fcm_message(1,getUser.fcm)   
+### edit devicenabe
+@api_view(["GET","POST","PUT"])
+def devicePinNames(request):
+    if request.method == "GET":
+        device_data = deviceStatus.objects.filter(d_id=request.GET['d_id'])
+        roomJson = deviceStatusSerializers(device_data, many=True)
+        dd = roomJson.data[:]
+        return Response(dd[0])
+
+    elif request.method == "POST":
+        received_json_data=json.loads(request.body)
+        serializer = deviceStatusSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response("data created", status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == "PUT":
+        received_json_data=json.loads(request.body)
+        device_id=received_json_data['d_id']
+        print('all set')
+        try:
+            print('excecuted')
+            device_object=deviceStatus.objects.get(d_id=device_id)
+        except device_object.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = deviceStatusSerializers(device_object, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response("data updated", status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # ################################### Update Pin Status For DilogFlow ###################################  OK GOOGLE  ######################
 
