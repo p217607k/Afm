@@ -21,6 +21,12 @@ from django.core.management.base import BaseCommand, CommandError
 from datetime import datetime, timedelta
 
     
+    
+from phone_field import PhoneField
+class phone(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    phone_number = PhoneField(blank=True, help_text='Contact phone number')
 
 
 device_categories = (

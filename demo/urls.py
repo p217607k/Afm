@@ -23,8 +23,9 @@ from myapp import views as myapp_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/login/', views.obtain_auth_token),
-    path('',include('myapp.urls')),
 
+    path('',include('myapp.urls')),
+    path('phone/', myapp_view.phonenumber),
     path('getthedataofuser/',myapp_view.userdataList),
     path('addyourplace/',myapp_view.placeList),
     path('addyourfield/',myapp_view.fieldList),
@@ -43,6 +44,9 @@ urlpatterns = [
     path('subuseraccess/', myapp_view.subuaccess),
     path('subuserpalceaccess/', myapp_view.subuplace),
     path('giveaccesstotempuser/', myapp_view.tempU),
+    
+
+    #tempuserautodelete
     path('getalldatayouaddedtempuser/', myapp_view.tempulist),
     path('getalldevicesbyonlyfieldf_id/', myapp_view.devicegetallList),
     path('getyouplacename/', myapp_view.placenamelist),

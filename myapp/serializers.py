@@ -5,7 +5,11 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 # from drf_braces.serializers.form_serializer import FormSerializer
 # from myapp.forms import UserRegisterForm, SubUserRegisterForm
-from myapp.models import deviceStatus, place,field,device, subuseraccess, subuserplace, tempuser,allDevices,FirebaseDetails
+from myapp.models import deviceStatus, place,field,device, subuseraccess, subuserplace, tempuser,allDevices,FirebaseDetails,phone
+class phone_Serializers(serializers.ModelSerializer):
+    class Meta:
+        model = phone
+        fields = '__all__'
 
 class userSerializers(serializers.ModelSerializer):
     class Meta:
@@ -119,10 +123,10 @@ class tempuserregisterSerializers(serializers.ModelSerializer):
         model = tempuser
         fields= '__all__'
 
-# class dateasignSerializers(serializers.ModelSerializer):
-#     class Meta:
-#         model = tempuser
-#         fields= ('id','date','timing',)
+class dateasignSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = tempuser
+        fields= ('id','date','timing',)
 
 # class timeasignSerializers(serializers.ModelSerializer):
 #     class Meta:

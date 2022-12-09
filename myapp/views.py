@@ -63,13 +63,54 @@ from myapp.utils import get_variable
 from django.contrib.auth.views import PasswordChangeView
 from django.core.mail import send_mail
 import time
+from datetime import datetime
+from datetime import date
 # from background_task import background
 from rest_framework.generics import ListCreateAPIView
 
 conn = http.client.HTTPConnection("2factor.in")
 
 # Create your views here.
-
+def tempuserautodelete():
+        now = datetime.today()
+        now1=str(now)
+        now2 = now1[:16:]
+        dat1 = datetime.strptime(now2, "%Y-%m-%d  %H:%M")
+        data1 = tempuser.objects.all()
+        # pinscheduledlist = deviceStatus.objects.all()
+        dataJson = dateasignSerializers(data1, many=True)
+        # pinjson = deviceStatusSerializers(pinscheduledlist,many=True)
+        
+        for data in dataJson.data:
+            _date = data['date']
+            _timing = data['timing']
+            _id = data['id']
+            dateTimeVal = _date+" "+_timing
+            tempdate = datetime.strptime(dateTimeVal, "%Y-%m-%d  %H:%M")
+            if(tempdate <=  dat1):
+              data2 = tempuser.objects.filter(id=_id)
+              data2.delete() 
+              print("delete" , _id)
+            else:
+                print("NOOOOOOOOOOOOOOOOOOO")
+            
+        
+        
+def phonenumber(request):
+    if request.method=="GET":
+        data = phone.objects.filter(user=request.user)
+        placeJson = phone_Serializers(data, many=True)
+        print(data)
+        return Response(placeJson.data)
+        # dd = placeJson.data[:]
+        # return Response(dd[0])
+    elif request.method == "POST":
+        received_json_data=json.loads(request.body)
+        serializer = phone_Serializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response("Post Data", status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 def index(request):
     return HttpResponse("Hello pk ......")
 class alldevice(ListCreateAPIView):
@@ -749,3 +790,21 @@ class UserDetailAPI(APIView):
 class RegisterUserAPIView(generics.CreateAPIView):
   permission_classes = (AllowAny,)
   serializer_class = RegisterSerializer
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.response import Response
+from rest_framework import status
+
+
+class LogoutView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
