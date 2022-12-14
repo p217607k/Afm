@@ -5,12 +5,17 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 # from drf_braces.serializers.form_serializer import FormSerializer
 # from myapp.forms import UserRegisterForm, SubUserRegisterForm
-from myapp.models import deviceStatus, place,field,device, subuseraccess, subuserplace, tempuser,allDevices,FirebaseDetails,phone
+from myapp.models import( deviceStatus, place,field,device, subuseraccess, subuserplace, tempuser,allDevices,FirebaseDetails
+   ,phone,emergencyNumber,ssidPassword)
 class phone_Serializers(serializers.ModelSerializer):
     class Meta:
         model = phone
         fields = '__all__'
 
+class ssidPasswordSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = ssidPassword
+        fields = '__all__'
 class userSerializers(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -184,6 +189,10 @@ class deviceStatusSerializers(serializers.ModelSerializer):
         model = deviceStatus
         fields = '__all__'
         ########
+class emernumberSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = emergencyNumber
+        fields = '__all__'
 # from .models import post
 # from .models import post
 from rest_framework import serializers

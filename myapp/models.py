@@ -19,7 +19,7 @@ from datetime import date
 from django.core.management.base import BaseCommand, CommandError
 # from cus_leads.models import CustomerLeads 
 from datetime import datetime, timedelta
-
+from django.core.validators import MinValueValidator, MaxValueValidator
     
     
 from phone_field import PhoneField
@@ -117,7 +117,23 @@ class deviceStatus(models.Model):
 # class pinName(models.Model):
 #     d_id = models.OneToOneField(allDevices, on_delete=models.CASCADE,primary_key=True)
    
+class ssidPassword(models.Model):
+    d_id = models.OneToOneField(allDevices, on_delete=models.CASCADE,primary_key=True)
+    ssid1 = models.CharField(unique=True, max_length=15,blank=True)
+    password1 = models.CharField(null=False, max_length=50,blank=True)
+    ssid2 = models.CharField(unique=True, max_length=15,blank=True)
+    password2 = models.CharField(null=False, max_length=50,blank=True)
+    ssid3 = models.CharField(unique=True, max_length=15,blank=True)
+    password3 = models.CharField(null=False, max_length=50,blank=True)
 
+class emergencyNumber(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    d_id = models.OneToOneField(allDevices, on_delete=models.CASCADE,primary_key=True)
+    number1 = models.CharField(null=True, max_length=12)
+    number2 = models.CharField(null=True, max_length=12)
+    number3 = models.CharField(null=True, max_length=12)
+    number4 = models.CharField(null=True, max_length=12)
+    number5 = models.CharField(null=True, max_length=12)
    
     # def __str__(self):
     #   return self.d_id
@@ -142,11 +158,11 @@ class tempuser(models.Model):
     name = models.CharField(max_length=100,blank=False)
     date = models.DateField(default="2000-01-01",null=True)
     timing = models.CharField(max_length=200,default='00:00')
+    d_id = models.ForeignKey(allDevices, on_delete=models.CASCADE, blank=True, null=True)
     p_id = models.ForeignKey(place, on_delete=models.CASCADE, blank=True, null=True)
     f_id = models.ForeignKey(field, on_delete=models.CASCADE, blank=True, null=True)
-    # device_id = models.ForeignKey(device, on_delete=models.CASCADE, blank=True, null=True)
-    # r_id = models.ForeignKey(room, on_delete=models.CASCADE, blank=True, null=True)
-    d_id = models.ForeignKey(device, on_delete=models.CASCADE, blank=True, null=True)
+    device = models.ForeignKey(device, on_delete=models.CASCADE, blank=True, null=True)
+    status = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(5)])
 
 
 class FirebaseDetails(models.Model):

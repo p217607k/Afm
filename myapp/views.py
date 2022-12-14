@@ -71,6 +71,64 @@ from rest_framework.generics import ListCreateAPIView
 conn = http.client.HTTPConnection("2factor.in")
 
 # Create your views here.
+@api_view(["GET","POST","PUT"])
+def ssidList(request):
+    if request.method == "GET":
+        device_data = ssidPassword.objects.filter(d_id=request.GET['d_id'])
+        roomJson = ssidPasswordSerializers(device_data, many=True)
+        dd = roomJson.data[:]
+        return Response(dd[0])
+
+    elif request.method == "POST":
+        received_json_data=json.loads(request.body)
+        serializer = ssidPasswordSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response("data created", status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == "PUT":
+        received_json_data=json.loads(request.body)
+        device_id=received_json_data['d_id']
+        try:
+            device_object=ssidPassword.objects.get(d_id=device_id)
+        except device_object.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = ssidPasswordSerializers(device_object, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response("data updated", status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        ##
+@api_view(["GET","POST","PUT"])
+def emerNumber(request):
+    if request.method=="GET":
+        enumdata = emergencyNumber.objects.filter(user = request.user,d_id=request.GET['d_id'])
+        emernumberJson = emernumberSerializers(enumdata, many=True)
+        dd = emernumberJson.data[:]
+        return Response(dd[0])
+
+    elif request.method == "POST":
+        received_json_data=json.loads(request.body)
+        serializer = emernumberSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response("data created", status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method =="PUT":
+        received_json_data=json.loads(request.body)
+        device_id=received_json_data['d_id']
+        try:
+            device_object=emergencyNumber.objects.get(d_id=device_id)
+        except device_object.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = emernumberSerializers(device_object, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response("data updated", status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 def tempuserautodelete():
         now = datetime.today()
         now1=str(now)
@@ -88,9 +146,23 @@ def tempuserautodelete():
             dateTimeVal = _date+" "+_timing
             tempdate = datetime.strptime(dateTimeVal, "%Y-%m-%d  %H:%M")
             if(tempdate <=  dat1):
-              data2 = tempuser.objects.filter(id=_id)
-              data2.delete() 
-              print("delete" , _id)
+
+                data2 = tempuser.objects.filter(id=_id)
+                deviceStatusObj =  deviceStatus.objects.get(pk= data2[0].d_id)
+                deviceStatusObj.pin1Status =  data2[0].status
+                deviceStatusObj.pin2Status =  data2[0].status
+                deviceStatusObj.pin3Status =  data2[0].status
+                deviceStatusObj.pin4Status =  data2[0].status
+                deviceStatusObj.pin5Status =  data2[0].status
+                deviceStatusObj.pin6Status =  data2[0].status
+                deviceStatusObj.pin7Status =  data2[0].status
+                deviceStatusObj.pin8Status =  data2[0].status
+                deviceStatusObj.pin9Status =  data2[0].status
+                deviceStatusObj.pin10Status =  data2[0].status
+              
+                deviceStatusObj.save()
+                data2.delete() 
+                print("delete" , _id)
             else:
                 print("NOOOOOOOOOOOOOOOOOOO")
             

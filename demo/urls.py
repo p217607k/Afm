@@ -44,6 +44,8 @@ urlpatterns = [
     path('subuseraccess/', myapp_view.subuaccess),
     path('subuserpalceaccess/', myapp_view.subuplace),
     path('giveaccesstotempuser/', myapp_view.tempU),
+    path('getpostemergencynumber/', myapp_view.emerNumber),
+    path('ssidpassword/', myapp_view.ssidList),
     
 
     #tempuserautodelete

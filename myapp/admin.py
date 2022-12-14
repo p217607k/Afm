@@ -17,7 +17,8 @@ admin.site.register(allDevices)
 admin.site.register(device)
 
 admin.site.register(deviceStatus)
-
+admin.site.register(emergencyNumber)
+admin.site.register(ssidPassword)
 # admin.site.register(pinName)
 admin.site.register(subuseraccess)
 
